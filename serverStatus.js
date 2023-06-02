@@ -7,7 +7,10 @@ import * as discord from './discord.js'
 export default function getServerStatus(host, port) {
     mcs.statusJava(host, port)
         .then(async (res) => {
-            if(!res.online) return
+            if(!res.online) {
+                discord.setActivity(true)
+                return
+            }
 
             const mappedList = res.players?.list.map(p => p.name_clean)
             findPlayerJoined(data.players_list, mappedList)
@@ -15,7 +18,7 @@ export default function getServerStatus(host, port) {
 
             data.players_max = res.players.max
             data.icon = res.icon
-            await discord.setActivity()
+            discord.setActivity()
 
             // console.log('Refreshed data')
         })
@@ -24,6 +27,6 @@ export default function getServerStatus(host, port) {
             // throw error
         })
         .finally(() => {
-            setTimeout(() => getServerStatus(host, port), 60000)
+            setTimeout(() => getServerStatus(host, port), 30000)
         })
 }

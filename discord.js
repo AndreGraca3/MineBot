@@ -5,7 +5,7 @@ import data from './data.js'
 import * as utils from './utils.js'
 
 
-const client = new discord.Client(
+export const client = new discord.Client(
     {
         intents: [
             discord.GatewayIntentBits.Guilds,
@@ -14,13 +14,6 @@ const client = new discord.Client(
             discord.GatewayIntentBits.GuildEmojisAndStickers
         ],
     })
-
-client.login(TOKEN)
-
-client.on("ready", async () => {
-    await setActivity()
-    console.log("Bot is Online")
-})
 
 client.on("interactionCreate", async (interaction) => {
     try {
@@ -72,8 +65,9 @@ const rest = new discord.REST({ version: '10' }).setToken(TOKEN);
     }
 })()
 
-export async function setActivity() {
-    client.user.setActivity(`${data.players_list.length} Players`, { type: discord.ActivityType.Watching })
+export function setActivity(offline) {
+    const msg = offline ? "🔴 Server Offline" : `${data.players_list.length} Players`
+    client.user.setActivity(`${msg}`, { type: discord.ActivityType.Watching })
 }
 
 export async function notifyJoin(player) {
