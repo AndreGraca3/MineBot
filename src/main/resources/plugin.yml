@@ -1,0 +1,4 @@
+name: MineBot
+version: '${project.version}'
+main: pt.graca.minebot.MineBot
+api-version: '1.20'
