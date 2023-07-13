@@ -35,16 +35,6 @@ class Discord {
         return embedded.build()
     }
 
-    fun sendEmbedsToChannel(
-        channel: TextChannel,
-        title: String,
-        description: String? = null,
-        color: Color = Color.ORANGE,
-        vararg fields: EmbeddedField
-    ) {
-        channel.sendMessageEmbeds(createEmbedded(title, description, color, *fields)).queue()
-    }
-
     fun replyEmbedsToInteraction(
         event: SlashCommandInteractionEvent,
         title: String,
@@ -59,12 +49,15 @@ class Discord {
         val channel = jda.getTextChannelById(CHANNEL_ID)
             ?: throw IllegalArgumentException("The channel id $CHANNEL_ID does not correspond to an existing channel")
 
-        sendEmbedsToChannel(channel,
-            "⚠️ $playerName entered", "<@&1081609569047941232>", Color.GREEN, EmbeddedField(
-                "**Players Online**",
-                onlinePlayers.toString(), false
+        val role = "<@&1081609569047941232>"
+        channel.sendMessage(role).setEmbeds(
+            createEmbedded(
+                "⚠️ $playerName entered", role, Color.GREEN, EmbeddedField(
+                    "**Players Online**",
+                    onlinePlayers.toString(), false
+                )
             )
-        )
+        ).queue()
     }
 
     fun updatePresence(onlinePlayers: Int) {
